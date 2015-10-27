@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
-
 import org.elasticsearch.common.component.AbstractComponent;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
@@ -50,7 +49,7 @@ public class ZMQRestImpl extends AbstractComponent {
 		final CountDownLatch latch = new CountDownLatch(1);
         final AtomicReference<ZMQRestResponse> ref = new AtomicReference<ZMQRestResponse>();
         
-		this.restController.dispatchRequest(request, new RestChannel(request) {
+		this.restController.dispatchRequest(request, new RestChannel(request, true) {
 			
 			@Override
 			public void sendResponse(RestResponse response) {
@@ -81,7 +80,7 @@ public class ZMQRestImpl extends AbstractComponent {
 			zmqResponse.setContentType(response.contentType());
 		}
         if (response.content().length() > 0) {
-            if (response.contentThreadSafe()) {
+            if (zmqResponse.contentThreadSafe()) {
             	zmqResponse.setBody(ByteBuffer.wrap(response.content().toBytes(), 0, response.content().length()));
             } else {
                 // argh!, we need to copy it over since we are not on the same thread...

@@ -1,14 +1,13 @@
 package org.elasticsearch.zeromq.test;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Date;
-
 import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
 import org.elasticsearch.zeromq.ZMQSocket;
@@ -35,11 +34,10 @@ public class ZMQTransportPluginTest {
    @BeforeClass
    public static void setUpBeforeClass() throws Exception {
       // Instantiate an ES server
+      Settings settings = ImmutableSettings.settingsBuilder()
+         .put("es.config", "elasticsearch.yml").build();
       node = NodeBuilder.nodeBuilder()
-              .settings(
-                      ImmutableSettings.settingsBuilder()
-                      .put("es.config", "elasticsearch.yml")
-              ).node();
+         .settings(settings).node();
 
       // Instantiate a ZMQ context
       context = ZMQ.context(1);
@@ -105,9 +103,15 @@ public class ZMQTransportPluginTest {
 
       String result = null;
       try {
-         socket.send(sb.toString().getBytes("UTF-8"), 0);
+         System.out.println("SENDING DATA: " + sb.toString());
+         socket.setReceiveTimeOut(1000);
+
+         boolean rc = socket.send(sb.toString().getBytes("UTF-8"), 0);
+         System.out.println("DONE: SENDING DATA: " + sb.toString());
+         System.out.println("Return code: " + rc);
 
          byte[] response = socket.recv(0);
+         System.out.println("RECEIVED DATA: ");
          result = new String(response, Charset.forName("UTF-8"));
 
       } catch (UnsupportedEncodingException e) {
