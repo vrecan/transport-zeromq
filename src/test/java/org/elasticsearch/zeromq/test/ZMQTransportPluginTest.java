@@ -103,15 +103,11 @@ public class ZMQTransportPluginTest {
 
       String result = null;
       try {
-         System.out.println("SENDING DATA: " + sb.toString());
          socket.setReceiveTimeOut(1000);
 
          boolean rc = socket.send(sb.toString().getBytes("UTF-8"), 0);
-         System.out.println("DONE: SENDING DATA: " + sb.toString());
-         System.out.println("Return code: " + rc);
 
          byte[] response = socket.recv(0);
-         System.out.println("RECEIVED DATA: ");
          result = new String(response, Charset.forName("UTF-8"));
 
       } catch (UnsupportedEncodingException e) {

@@ -80,14 +80,7 @@ public class ZMQRestImpl extends AbstractComponent {
 			zmqResponse.setContentType(response.contentType());
 		}
         if (response.content().length() > 0) {
-            if (zmqResponse.contentThreadSafe()) {
-            	zmqResponse.setBody(ByteBuffer.wrap(response.content().toBytes(), 0, response.content().length()));
-            } else {
-                // argh!, we need to copy it over since we are not on the same thread...
-                byte[] body = new byte[response.content().length()];
-                System.arraycopy(response.content(), 0, body, 0, response.content().length());
-                zmqResponse.setBody(ByteBuffer.wrap(body));
-            }
+            zmqResponse.setBody(ByteBuffer.wrap(response.content().toBytes(), 0, response.content().length()));
         }
         return zmqResponse;
     }
