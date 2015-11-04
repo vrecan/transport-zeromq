@@ -110,7 +110,6 @@ public class ZMQRestRequest extends RestRequest{
       return ((body != null) && (body.remaining() > 0));
    }
 
-   @Override
    public boolean contentUnsafe() {
       return false;
    }

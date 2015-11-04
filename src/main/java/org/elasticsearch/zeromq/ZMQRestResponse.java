@@ -1,12 +1,10 @@
 package org.elasticsearch.zeromq;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
-
+import org.elasticsearch.common.bytes.BytesArray;
+import org.elasticsearch.common.bytes.BytesReference;
 import org.elasticsearch.rest.RestResponse;
 import org.elasticsearch.rest.RestStatus;
-import org.elasticsearch.common.bytes.BytesReference;
-import org.elasticsearch.common.bytes.BytesArray;
 
 /**
  * @author tlrx
@@ -50,7 +48,6 @@ public class ZMQRestResponse extends RestResponse {
       return status;
    }
 
-   @Override
    public boolean contentThreadSafe() {
       return false;
    }
