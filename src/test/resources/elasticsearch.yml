@@ -1,14 +1,14 @@
 # Elasticsearch configuration for unit tests
 node:
-	data: true
-	local: true
+ data: true
+ local: true
 
 path:
-	data: ./target/es/data
+ data: ./target/es/data
 
 index:
-    store:
-        type: memory
+ store:
+  type: memory
 
 # ZeroMQ Transport config
 zeromq.router.bind: tcp://*:9800
